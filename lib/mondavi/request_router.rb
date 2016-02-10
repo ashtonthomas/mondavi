@@ -25,7 +25,7 @@ module Mondavi
             # mock request and satisfy locally
             issue_local_request(
               http_verb: 'GET',
-              urn_path: urn_path(supplied_url_variables)
+              urn_path: urn_path(method, supplied_url_variables)
             )
           else
             # issue external request
@@ -40,8 +40,8 @@ module Mondavi
 
             issue_external_request(
               http_verb: 'GET',
-              url: url(supplied_url_variables),
-              urn_path: urn_path(supplied_url_variables)
+              url: url(method, supplied_url_variables),
+              urn_path: urn_path(method, supplied_url_variables)
             )
 
           end
@@ -59,15 +59,14 @@ module Mondavi
         self.to_s.match(/::.*IndexApi$/).present?
       end
 
-      def urn_path(supplied_url_variables)
+      def urn_path(method, supplied_url_variables)
         return "/index" if index?
         return supplied_url_variables[:urn_path] if component_index?
 
         # @@service_document should never have a representer
         # so it will just be a hashie::mash
-        details = @@service_document.concepts[self.to_s]
+        details = @@service_document.concepts[self.to_s][method]
 
-        details.url_template
         path = details.urn_path_template
 
         # look at each_with_object
@@ -78,11 +77,11 @@ module Mondavi
         path
       end
 
-      def url(supplied_url_variables)
+      def url(method, supplied_url_variables)
         return "https://chi-winery.herokuapp.com" if index?
         return supplied_url_variables[:url] if component_index?
 
-        details = @@service_document.concepts[self.to_s]
+        details = @@service_document.concepts[self.to_s][method]
         url = details.url_template
 
         # look at each_with_object
@@ -130,7 +129,17 @@ module Mondavi
           struct.from_json(body)
         rescue NameError => e
           # Representer doesn't exist, use Hashie::Mash
-          Hashie::Mash.new(JSON.parse(JSON.load(body)))
+          # TODO could get back errors (http, not-found etc)
+
+          # TODO
+          # Looks like representers are serializing json
+          # and index is not
+          begin
+            Hashie::Mash.new(JSON.parse(JSON.load(body)))
+          rescue TypeError => e
+            Hashie::Mash.new(JSON.parse(body))
+          end
+
         end
       end
 
