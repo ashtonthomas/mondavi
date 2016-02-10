@@ -33,6 +33,9 @@ Mondavi urges you to structure the building blocks of a service into a "componen
         - urn_path is seperate from url as we only need urn_path for local requests
 - Each application/service/server will have an apis/applicatiion_api which mounts all the local components
   - this can also be generated, so this can go away
+- If you wanted, you could have a 'misc' app/service/server for a collection of components that don't belong anywere else
+  - This may save on infrastructure costs as well as maintenance costs
+  - However, sticking an expiremental or weird component on any other somewhat related app is fine as it is well contained and can be moved whenever..
 
 [Here](https://github.com/ashtonthomas/pet-store) is an example application using Mondavi
 
