@@ -28,10 +28,22 @@ Mondavi urges you to structure the building blocks of a service into a "componen
     - builds a complete index/service-document/manifest file
     - IndexComponent::IndexApiImpl calls the corredsponding [Foo]Component::IndexApi (it uses the class defined in the shared library) for each component
     - Therefore, each component must have: [Foo]Component::IndexApiImpl which returns the manifest for its apis
+      - note: this can actually be generated based on the Grape api - so no work should be needed
       - an entry for each method and templates for url and urn_path
         - urn_path is seperate from url as we only need urn_path for local requests
+- Each application/service/server will have an apis/applicatiion_api which mounts all the local components
+  - this can also be generated, so this can go away
 
 [Here](https://github.com/ashtonthomas/pet-store) is an example application using Mondavi
+
+Mondavi is about:
+- Managing dependencies (nothing should ever call into another component's files - only via the api)
+- Mocking tests when external services are involved
+- Flexibility when modifying an API
+- Consistency: the same file to serialize/parse a response
+- Consistency: mocks used by consumers are the same expectations set on the producing api
+- Expiremental components can be added, evovled, and completed moved (with no changes to consumers)
+
 
 ## Installation
 
