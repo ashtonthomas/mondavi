@@ -1,5 +1,5 @@
 # Should be used in test (always) and dev (when call is external)
-module ComponentsApi
+module Mondavi
   module PactRouter
 
     def self.included(base)

@@ -11,9 +11,9 @@ module Mondavi
         mount_url_prefix = url_prefix
       end
 
-      def url_prefix
-        mount_url_prefix || '/foo/bar'
-      end
+      # def url_prefix
+      #   mount_url_prefix || '/foo/bar'
+      # end
     end
   end
 end

@@ -1,4 +1,4 @@
-module ComponentsApi
+module Mondavi
   module RequestRouter
     def self.included(base)
       base.extend(ClassMethods)
@@ -29,7 +29,7 @@ module ComponentsApi
             )
           else
             # issue external request
-            binding.pry # todo
+            # binding.pry # todo
 
             # Request and LocalRequest
 
@@ -60,7 +60,7 @@ module ComponentsApi
       end
 
       def urn_path(supplied_url_variables)
-        return "/" if index?
+        return "/index" if index?
         return supplied_url_variables[:urn_path] if component_index?
 
         # @@service_document should never have a representer
@@ -101,9 +101,9 @@ module ComponentsApi
           faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
         end
 
-        binding.pry
-        response = conn.get urn_path
-        response.body
+        # binding.pry
+        # response = conn.get urn_path
+        # response.body
       end
 
       def issue_local_request(http_verb: nil, urn_path: nil)
